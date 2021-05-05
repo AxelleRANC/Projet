@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include<cmath>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
+using namespace std;
+
+// programme principal
+int main()
+{
+  //Variables:
+  string message, messagechiffre, messagebinaire,code,k,m,o,p; 
+  int i,j,bit,c,l,k1,k2,k3; 
+  messagechiffre="";
+  messagebinaire="";
+  l=0;
+
+ cout << "Saissisez votre message" << endl;
+ getline (cin, message);
+ //le message est en lettre
+ 
+ for (i=0; i<= message.length()-1;i+=1){
+  j=message.at(i);
+  messagechiffre=messagechiffre + to_string(j);
+  
+ } 
+ //le message est en chiffre
+ 
+ for(i=messagechiffre.length()-1; i>=0; i+=-1){
+   k=messagechiffre.at(i);
+   c=0;
+   if (k=="0"){
+     messagebinaire= "0000" + messagebinaire;
+   }
+   else {
+     while (k!="0"){
+       bit= stoi(k) % 2;
+       messagebinaire= to_string(bit)+messagebinaire;
+       k= to_string(stoi(k)/2);
+       c=c+1;
+       }
+    if (c!=4){
+     while(c!=4){
+     messagebinaire= to_string(0)+messagebinaire;
+     c=c+1;
+     }
+   }
+  }
+ }  
+ //le message est en binaire
+ 
+ while(l < messagebinaire.length()){
+    k=messagebinaire.at(l);
+    m=messagebinaire.at(l+1);
+    o=messagebinaire.at(l+2);
+    p=messagebinaire.at(l+3);
+    k1=(stoi(k)+stoi(m)+stoi(p))%2;
+    k2=(stoi(k)+stoi(o)+stoi(p))%2;
+    k3=(stoi(m)+stoi(o)+stoi(p))%2;
+    code = code + to_string(k1)+to_string(k2)+k+to_string(k3)+m+o+p;
+    l=l+4;
+  }
+ //le message est codé
+}
