@@ -1,0 +1,42 @@
+#include <VirtualWire.h>
+#include <VirtualWire_Config.h>
+
+char *msg;  
+// for incoming serial data
+int msgRentrer;
+
+void setup() {
+  Serial.begin(9600);     
+  // opens serial port, sets data rate to 9600 bps
+  Serial.println("Début communication");
+  
+  vw_setup(2000);     
+  // initialisation de la librairie VirtualWire à 2000 bauds
+ 
+}
+
+void loop() {
+  msgRentrer = 0;
+  Serial.println("Rentrer la lettre à envoyer");
+  // on attend que l'utilisateur nous envoie un caractère
+  while (msgRentrer == 0) 
+  {
+    if (Serial.available() > 0)
+    //On vérifie qu'un caractère à été envoyé
+    {
+      // lis le caractère
+      *msg = Serial.read();
+      msgRentrer = 1;
+    }
+  }
+  Serial.print("Envoie..."); 
+  // On signale le début de l'envoi
+  vw_send((uint8_t *)msg, strlen(msg));
+  // On envoie le message 
+  vw_wait_tx(); 
+  // On attend la fin de l'envoi
+  Serial.println("Done !"); 
+  // On signal la fin de l'envoi
+  delay(1000); 
+  // Et on attend 1s pour éviter que deux messages se superpose
+}
