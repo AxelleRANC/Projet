@@ -1,0 +1,109 @@
+#include <iostream>
+#include <string>
+#include<cmath>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
+using namespace std;
+
+// programme principal
+int main()
+{
+  //Variables:
+  string messagecode,messagebinaire,messagechiffre,message,c1,c2,c3,c4,c5,c6,c7,m1,m2,m3,m4,nb,ascii;
+  int l,s1,s2,s3,S,i,v,M,y,NB;
+
+  l=0;
+  cout << "message codé:" << endl;
+  cin >> messagecode;
+
+  while (l<messagecode.length()){
+    c1=messagecode.at(l);
+    c2=messagecode.at(l+1);
+    c3=messagecode.at(l+2);
+    c4=messagecode.at(l+3);
+    c5=messagecode.at(l+4);
+    c6=messagecode.at(l+5);
+    c7=messagecode.at(l+6);
+
+    s1=(stoi(c1)+stoi(c3)+stoi(c5)+stoi(c7))%2;
+    s2=(stoi(c2)+stoi(c3)+stoi(c6)+stoi(c7))%2;
+    s3=(stoi(c4)+stoi(c5)+stoi(c6)+stoi(c7))%2;
+   
+
+    if (s3==s2 && s2==s1 && s3==0){
+      m1=c3;
+      m2=c5;
+      m3=c6;
+      m4=c7;
+    }
+    else {
+      S=1*s1+2*s2+4*s3;
+      if (S==1){
+        c1=to_string((stoi(c1)+1)%2);
+      }
+      else if (S==2){
+        c2=to_string((stoi(c2)+1)%2);
+      }
+      else if (S==3){
+        c3=to_string((stoi(c3)+1)%2);
+      }
+      else if (S==4){
+        c4=to_string((stoi(c4)+1)%2);
+      }
+      else if (S==5){
+        c5=to_string((stoi(c5)+1)%2);
+      }
+      else if (S==6){
+        c6=to_string((stoi(c6)+1)%2);
+      }
+      else {
+        c7=to_string((stoi(c7)+1)%2);
+      }
+      m1=c3;
+      m2=c5;
+      m3=c6;
+      m4=c7;
+    }
+    messagebinaire=messagebinaire+m1+m2+m3+m4;
+    l=l+7;
+  }
+  
+  
+  v=0;
+  while (v<messagebinaire.length()){
+    m1=messagebinaire.at(v);
+    m2=messagebinaire.at(v+1);
+    m3=messagebinaire.at(v+2);
+    m4=messagebinaire.at(v+3);
+    M=stoi(m1)*8+stoi(m2)*4+stoi(m3)*2+stoi(m4)*1;
+
+    messagechiffre=messagechiffre+to_string(M);
+    v=v+4;
+  }
+
+
+  y=0;
+  while(y<messagechiffre.length()){
+    
+    nb=messagechiffre.at(y);
+    nb=nb+messagechiffre.at(y+1);
+    NB=stoi(nb);
+    
+    if (NB>=32 && NB<=127){
+      ascii=NB;
+      message=message+ascii;
+      y=y+2;
+    }
+    else {
+      nb=nb+messagechiffre.at(y+2);
+      NB=stoi(nb);
+      ascii=NB;
+      message=message+ascii;
+      y=y+3;
+
+    }
+      
+  }
+  cout<<message<<endl;
+} 
