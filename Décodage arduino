@@ -1,0 +1,64 @@
+#include <VirtualWire.h>
+// On inclus la librairie VirtualWire
+#include <VirtualWire_Config.h>
+
+int led = 13;
+ 
+void setup()
+{
+    Serial.begin(9600); 
+    // Initialisation du port série pour avoir un retour sur le 
+    serial monitor
+    Serial.println("Début communication");
+    
+    pinMode(led, OUTPUT);
+ 
+    vw_setup(2000); 
+    // initialisation de la librairie VirtualWire à 2000 bauds
+    vw_rx_start();  
+    // Activation de la partie réception de la librairie VirtualWire
+}
+ 
+void loop()
+{
+    digitalWrite(led, LOW);
+    uint8_t msgRecu[VW_MAX_MESSAGE_LEN]; 
+    // Tableau qui va contenir le message reçu (de taille maximum 
+    VW_MAX_MESSAGE_LEN)
+    uint8_t longueurMsg = VW_MAX_MESSAGE_LEN; 
+    // Taille maximum de notre tableau
+ 
+    if (vw_wait_rx_max(200)) 
+    // Si un message est reçu dans les 200ms qui viennent
+    {
+        if (vw_get_message(msgRecu, &longueurMsg)) 
+        // On copie le message, qu'il soit corrompu ou non
+        {
+            Serial.print("On recoit : ");
+            for (byte i = 0; i < longueurMsg; i++) 
+            // Si il n'est pas corrompu on l'affiche via Serial
+                Serial.print(msgRecu[i]);
+            Serial.println("");
+            if(strcmp("a", (char*)msgRecu) == 0)
+            // Si la lettre envoyer est a alors...
+            {
+              digitalWrite(led, HIGH);  
+              // allume la led 1s
+              delay(1000); 
+            }
+            else  if(strcmp("b", (char*)msgRecu) == 0)
+            // Sinon si la lettre envoyer est b...
+            {
+              digitalWrite(led, HIGH);  
+              // allume la led 3s
+              delay(3000); 
+            }
+            else // Sinon...
+            {
+              digitalWrite(led, HIGH);   
+              // allume la led 0,3s
+              delay(300); 
+            }
+        }
+    }
+}
